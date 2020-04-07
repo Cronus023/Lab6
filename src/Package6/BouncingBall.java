@@ -62,7 +62,11 @@ public class BouncingBall implements Runnable {
 	
 	// method run() hold true inside stream; when it stop then stream also stop
 	public void run() {
-       try {
+       try{
+    	   // synchronization of streams in field object
+    	   // if ball can move  - control will return to method
+    	   // else  - active stream will sleep
+    	   field.canMove(this);
     	   while(true) { 
     		 if (x + speedX <= radius) {
     			// left wall? jump to right wall
@@ -88,7 +92,6 @@ public class BouncingBall implements Runnable {
     			x+=speedX;
     			y+=speedY;
     		}
-
     		//stream sleep for a 1mc when it(SPEED) fast and for 15 when it slow
     		Thread.sleep(16-speed);
     	   }
