@@ -26,7 +26,14 @@ public class BouncingBall implements Runnable {
 	private double speedX;
 	private double speedY;
 
-	
+    public double getSpeedX() {
+	    return speedX;
+	}
+
+	public double getSpeedY() {
+	    return speedY;
+	}
+
 	public BouncingBall(Field field) {
 		//current field
 		this.field = field;
@@ -59,15 +66,14 @@ public class BouncingBall implements Runnable {
 		// start stream
 		thisThread.start();
 	}
-	
 	// method run() hold true inside stream; when it stop then stream also stop
 	public void run() {
        try{
-    	   // synchronization of streams in field object
-    	   // if ball can move  - control will return to method
-    	   // else  - active stream will sleep
-    	   field.canMove(this);
     	   while(true) { 
+    		   // synchronization of streams in field object
+        	   // if ball can move  - control will return to method
+        	   // else  - active stream will sleep
+        	   field.canMove(this);
     		 if (x + speedX <= radius) {
     			// left wall? jump to right wall
     			speedX = -speedX;

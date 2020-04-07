@@ -18,7 +18,10 @@ public class MainFrame extends JFrame {
 	
 	private JMenuItem pauseMenuItem;
 	private JMenuItem resumeMenuItem;
-
+	
+	// work field
+	private Field field = new Field();
+	
 	public MainFrame() {
 		super("Balls");
 		setSize(WIDTH, HEIGHT);
@@ -36,6 +39,7 @@ public class MainFrame extends JFrame {
 		JMenu ballMenu = new JMenu("Мячи");
 		Action addBallAction = new AbstractAction("Добавить мяч") {
 			public void actionPerformed(ActionEvent event) {
+				field.addBall();
 			    if (!pauseMenuItem.isEnabled() && !resumeMenuItem.isEnabled()) {
 			        pauseMenuItem.setEnabled(true);
 		        }
@@ -49,6 +53,7 @@ public class MainFrame extends JFrame {
 		menuBar.add(controlMenu);
 		Action pauseAction = new AbstractAction("Приостановить движение"){
 			public void actionPerformed(ActionEvent event) {
+				field.pause();
 			    pauseMenuItem.setEnabled(false);
 			    resumeMenuItem.setEnabled(true);
 			}
@@ -57,12 +62,14 @@ public class MainFrame extends JFrame {
 		pauseMenuItem.setEnabled(false);
 		Action resumeAction = new AbstractAction("Возобновить движение") {
 			public void actionPerformed(ActionEvent event) {
+				field.resume();
 			    pauseMenuItem.setEnabled(true);
 			    resumeMenuItem.setEnabled(false);
 			}
 		};
 		resumeMenuItem = controlMenu.add(resumeAction);
-		resumeMenuItem.setEnabled(false);  
+		resumeMenuItem.setEnabled(false); 
+		getContentPane().add(field, BorderLayout.CENTER);
 	}
 
 	public static void main(String[] args) {
