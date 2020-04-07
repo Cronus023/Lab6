@@ -60,9 +60,41 @@ public class BouncingBall implements Runnable {
 		thisThread.start();
 	}
 	
-	
+	// method run() hold true inside stream; when it stop then stream also stop
 	public void run() {
+       try {
+    	   while(true) { 
+    		 if (x + speedX <= radius) {
+    			// left wall? jump to right wall
+    			speedX = -speedX;
+    			x = radius;
+    		}
+    		else if (x + speedX >= field.getWidth() - radius) {
+    			 /// right wall? jump to left wall
+    			  speedX = -speedX;
+    			  x=new Double(field.getWidth()-radius).intValue();
+    	    } else if (y + speedY <= radius) {
+    			 // top wall? then:
+    			 speedY = -speedY;
+    			 y = radius;
+    		} 
+    	    else if (y + speedY >= field.getHeight() - radius) {
+    	    	  //lower wall? then:
+    			  speedY = -speedY;
+    			  y=new Double(field.getHeight()-radius).intValue();
+    		} 
+    	    else {
+    	    	// simple move in work field
+    			x+=speedX;
+    			y+=speedY;
+    		}
 
+    		//stream sleep for a 1mc when it(SPEED) fast and for 15 when it slow
+    		Thread.sleep(16-speed);
+    	   }
+       } catch(InterruptedException ex) {
+    	
+       }
 	}
 
 }
