@@ -28,7 +28,36 @@ public class BouncingBall implements Runnable {
 
 	
 	public BouncingBall(Field field) {
+		//current field
+		this.field = field;
 		
+		// radius of a ball random size
+		radius = new Double(Math.random()*(MAX_RADIUS - MIN_RADIUS)).intValue()+ MIN_RADIUS;
+
+		// dependencies between speed and size of ball
+		speed = new Double(Math.round(5*MAX_SPEED / radius)).intValue();
+		if (speed>MAX_SPEED) {
+			speed = MAX_SPEED;
+		}
+		
+		//start direction, corner-(0,2pi)
+		double angle = Math.random()*2*Math.PI;
+		
+		//colculate vertical and horizantal components of speed
+		speedX = 3*Math.cos(angle);
+		speedY = 3*Math.sin(angle);
+		
+		//ball have random color
+		color = new Color((float)Math.random(), (float)Math.random(),(float)Math.random());
+		
+		//random start coordinates of a ball
+		x = Math.random()*(field.getSize().getWidth() - 2*radius) + radius;
+		y = Math.random()*(field.getSize().getHeight() - 2*radius) + radius;
+		
+		// create new stream, this - link to yourself
+		Thread thisThread = new Thread(this);
+		// start stream
+		thisThread.start();
 	}
 	
 	
