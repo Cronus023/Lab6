@@ -46,5 +46,28 @@ public class Field extends JPanel {
 	        ball.paint(canvas);
 	    }
 	}
-
+	//(...........................SYNCHRONIZATION..................................)
+	
+	
+	// only one stream can be inside
+	public synchronized void pause() {
+	    // start pause mode
+	    paused = true;
+	}
+	
+	//check ability of ball to move( pause mode or not )
+	public synchronized void canMove(BouncingBall ball)
+	    throws InterruptedException {
+	        if (paused) {
+	            //if pause mode then stream which come inside this method sleep
+	           wait();
+	        }
+	}
+	
+	//close pause mode
+	public synchronized void resume() {
+	    paused = false;
+	    // wake up all the stream that are waiting to continue
+	    notifyAll();
+	}
 }
