@@ -25,22 +25,35 @@ public class BouncingBall implements Runnable {
 	private int speed;
 	private double speedX;
 	private double speedY;
-
+    
+	
     public double getSpeedX() {
 	    return speedX;
 	}
-
-	public double getSpeedY() {
+    public double getSpeedY() {
 	    return speedY;
 	}
 
+    public void getColor() {
+    	//if(color == Color.RED)
+    		//System.out.println("lol");
+	}
+    
+    public double getRadius() {
+	    return radius;
+	}
+    public void setRadius(int r) {
+    	radius = r;
+	}
+    
+    
 	public BouncingBall(Field field) {
 		//current field
 		this.field = field;
 		
 		// radius of a ball random size
 		radius = new Double(Math.random()*(MAX_RADIUS - MIN_RADIUS)).intValue()+ MIN_RADIUS;
-
+		
 		// dependencies between speed and size of ball
 		speed = new Double(Math.round(5*MAX_SPEED / radius)).intValue();
 		if (speed>MAX_SPEED) {
@@ -74,6 +87,67 @@ public class BouncingBall implements Runnable {
         	   // if ball can move  - control will return to method
         	   // else  - active stream will sleep
         	   field.canMove(this);
+        	   
+        	   for(int i=0;i<field.getArrayH();i++)
+                   for(int j=0;j<field.getArrayW();j++)
+                   {
+                       if(field.getArrayOfBoss()[i][j]!=null) {
+                           if ((y + speedY >= field.getArrayOfBoss()[i][j].getY()) && (y + speedY <= field.getArrayOfBoss()[i][j].getWidth() + field.getArrayOfBoss()[i][j].getY()) && x + speedX >= field.getArrayOfBoss()[i][j].getX() + field.getArrayOfBoss()[i][j].getLength()) {
+                               if ((x + speedX <= field.getArrayOfBoss()[i][j].getX() + field.getArrayOfBoss()[i][j].getLength() + radius)) {
+                                                                   // Достигли левой плоскотси прямоугольника, отталкиваемся вправо
+                                   speedX = -speedX;
+                                   x = field.getArrayOfBoss()[i][j].getX() + field.getArrayOfBoss()[i][j].getLength() + radius;
+                                   
+                                       field.getArrayOfBoss()[i][j].flagNow--;
+                                  
+                                   if(field.getArrayOfBoss()[i][j].flagNow<=0) {
+                                       field.deleteBoss(i, j);
+                                   }
+                               }
+                           }
+                           else if((y + speedY >= field.getArrayOfBoss()[i][j].getY()) && (y+ speedY <= field.getArrayOfBoss()[i][j].getWidth()+field.getArrayOfBoss()[i][j].getY()) && (x+speedX <= field.getArrayOfBoss()[i][j].getX())) {
+                               if ((x + speedX >= field.getArrayOfBoss()[i][j].getX() - radius)) {
+                                                                   // Достигли правой плоскотси прямоугольника, отскакиваемся влево
+                                   speedX = -speedX;
+                                   x = field.getArrayOfBoss()[i][j].getX() - radius;
+                                   
+                                       field.getArrayOfBoss()[i][j].flagNow--;
+                                  
+                                   if(field.getArrayOfBoss()[i][j].flagNow<=0) {
+                                       field.deleteBoss(i, j);
+                                   }
+                               }
+                           }
+                           else if((x+speedX >= field.getArrayOfBoss()[i][j].getX()) && (x+speedX <= field.getArrayOfBoss()[i][j].getLength()+field.getArrayOfBoss()[i][j].getX()) && (y+speedY <= field.getArrayOfBoss()[i][j].getY())) {
+                               if (y + speedY >= field.getArrayOfBoss()[i][j].getY() - radius) {
+                                                                   // Достигли верхней плоскотси прямоугольника, отскакиваемся вверх
+                                   speedY = -speedY;
+                                   y = field.getArrayOfBoss()[i][j].getY() - radius;
+                                   
+                                       field.getArrayOfBoss()[i][j].flagNow--;
+                                  
+                                   if(field.getArrayOfBoss()[i][j].flagNow<=0) {
+                                       field.deleteBoss(i, j);
+                                   }
+                               }
+                           }
+                           else if((x+speedX >= field.getArrayOfBoss()[i][j].getX()) && (x+speedX <= field.getArrayOfBoss()[i][j].getLength()+field.getArrayOfBoss()[i][j].getX()) && (y+speedY >= field.getArrayOfBoss()[i][j].getY()+field.getArrayOfBoss()[i][j].getWidth())) {
+                               if ((y + speedY <= field.getArrayOfBoss()[i][j].getY() + field.getArrayOfBoss()[i][j].getWidth() + radius)) {
+                                                                   // Достигли нижней плоскотси прямоугольника, отскакиваемся вниз
+                                   speedY = -speedY;
+                                   y = field.getArrayOfBoss()[i][j].getY() + field.getArrayOfBoss()[i][j].getWidth() + radius;
+                                   
+                                       field.getArrayOfBoss()[i][j].flagNow--;
+                                   
+                                   if(field.getArrayOfBoss()[i][j].flagNow<=0) {
+                                       field.deleteBoss(i, j);
+                                   }
+                               }
+                           }
+
+                       }
+                   }
+              
     		 if (x + speedX <= radius) {
     			// left wall? jump to right wall
     			speedX = -speedX;

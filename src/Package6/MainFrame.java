@@ -19,6 +19,10 @@ public class MainFrame extends JFrame {
 	private JMenuItem pauseMenuItem;
 	private JMenuItem resumeMenuItem;
 	
+	private JMenuItem addBossMenuItem;
+	private JMenuItem deleteBossMenuItem;
+	
+	
 	// work field
 	private Field field = new Field();
 	
@@ -30,7 +34,6 @@ public class MainFrame extends JFrame {
 		setLocation((kit.getScreenSize().width - WIDTH)/2,(kit.getScreenSize().height - HEIGHT)/2);
         //full open
 		setExtendedState(MAXIMIZED_BOTH);
-		
 		// create menu
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -47,6 +50,26 @@ public class MainFrame extends JFrame {
 		};
 		menuBar.add(ballMenu);
 		ballMenu.add(addBallAction);
+		
+		//create menu item "boss"
+		JMenu bossMenu = new JMenu("Обжора");
+		Action addBossAction = new AbstractAction("Добавить обжору") {
+			public void actionPerformed(ActionEvent event) {
+				field.addBoss();
+				pauseMenuItem.setEnabled(true);
+                resumeMenuItem.setEnabled(false);
+			}
+		};
+		addBossMenuItem = bossMenu.add(addBossAction);
+	
+		Action deleteBossAction = new AbstractAction("Удалить обжору") {
+			public void actionPerformed(ActionEvent event) {
+				field.deleteBosses();
+			}
+		};
+		deleteBossMenuItem = bossMenu.add(deleteBossAction);
+		deleteBossMenuItem.setEnabled(false);
+		menuBar.add(bossMenu);
 		
 		//create menu item "control"
 		JMenu controlMenu = new JMenu("Управление");
